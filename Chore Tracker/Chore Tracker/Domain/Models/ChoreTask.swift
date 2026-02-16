@@ -1,5 +1,5 @@
 //
-//  Task.swift
+//  ChoreTask.swift
 //  Chore Tracker
 //
 //  Created by Andrii Osipchuk on 12.02.2026.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Task: Identifiable, Equatable, Sendable {
+public struct ChoreTask: Identifiable, Equatable, Sendable {
     public let id: String
     public var title: String
     public var points: Int

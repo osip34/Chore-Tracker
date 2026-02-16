@@ -8,13 +8,13 @@
 import Foundation
 
 public protocol TaskRepository: Sendable {
-    func fetchTasks(teamId: String) async throws -> [Task]
+    func fetchTasks(teamId: String) async throws -> [ChoreTask]
     func createTask(
         title: String,
         points: Int,
         teamId: String,
         createdBy: String
-    ) async throws -> Task
+    ) async throws -> ChoreTask
     
     func completeTask(
         taskId: String,
