@@ -10,11 +10,17 @@ import CryptoKit
 import AuthenticationServices
 import FirebaseAuth
 
+protocol AppleSignInViewModelProtocol {
+    var isLoading: Bool { get }
+    
+    func prepareSignInRequest(_ request: ASAuthorizationAppleIDRequest)
+    func handleSignInCompletion(_ result: Result<ASAuthorization, Error>)
+}
+
 @MainActor
 @Observable
-class AppleSignInViewModel {
-    private(set) var currentNonce: String?
-    private(set) var errorMessage: String?
+class AppleSignInViewModel: AppleSignInViewModelProtocol {
+    private var currentNonce: String?
     private(set) var isLoading = false
     
     func prepareSignInRequest(_ request: ASAuthorizationAppleIDRequest) {
@@ -30,7 +36,6 @@ class AppleSignInViewModel {
         case .success(let authResults):
             handleAuthorization(authResults)
         case .failure(let error):
-            errorMessage = "Apple sign in error: \(error.localizedDescription)"
             print("Apple sign in error:", error)
         }
     }
@@ -42,7 +47,6 @@ class AppleSignInViewModel {
             let appleIDToken = appleIDCredential.identityToken,
             let idTokenString = String(data: appleIDToken, encoding: .utf8)
         else {
-            errorMessage = "Unable to fetch identity token"
             print("Unable to fetch identity token")
             return
         }
@@ -64,7 +68,6 @@ class AppleSignInViewModel {
                 self?.isLoading = false
                 
                 if let error = error {
-                    self?.errorMessage = "Firebase auth error: \(error.localizedDescription)"
                     print("Firebase auth error:", error)
                     return
                 }
